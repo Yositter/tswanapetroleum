@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tswana Petroleum</title>
+<meta name="description" content="Tswana Petroleum supplies diesel, petrol, Jet A-1, illuminating paraffin and lubricants to mining, agriculture, construction, transport, aviation and industry across the SADC region.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap">
+<style>
+:root{
+  --ground:#F1F2EE;--surface:#FBFBF9;--sunken:#E7EAE5;
+  --ink:#13222D;--ink-soft:#2D3C46;--muted:#56646D;
+  --rule:#D3D9D7;--rule-strong:#A2ADB1;
+  --haz:#E8711E;--haz-hover:#D2600F;--on-haz:#1A1208;--plate:#E8711E;--plate-ink:#000;
+  --haz-tint:rgba(232,113,30,.09);
+  --night:#102330;--on-night:#E7EDEF;--night-muted:#9DB0BA;--night-rule:#284353;
+  --map-dot:#AFB9BC;--map-line:#13222D;--map-halo:#F1F2EE;
+  --error:#B42318;--focus:#C0560B;
+  --font:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --wrap:1280px;--gutter:clamp(16px,4vw,48px);--header-h:72px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0C171E;--surface:#12212B;--sunken:#0F1D26;
+    --ink:#E4EAEC;--ink-soft:#C4CED2;--muted:#93A3AC;
+    --rule:#23353F;--rule-strong:#3E5462;
+    --haz:#F07A26;--haz-hover:#FF9142;--haz-tint:rgba(240,122,38,.12);
+    --night:#071016;--on-night:#E4EAEC;--night-muted:#8FA2AC;--night-rule:#1F3441;
+    --map-dot:#2C404B;--map-line:#C9D5DA;--map-halo:#0C171E;
+    --error:#FF8A7A;--focus:#FF9142;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0C171E;--surface:#12212B;--sunken:#0F1D26;
+  --ink:#E4EAEC;--ink-soft:#C4CED2;--muted:#93A3AC;
+  --rule:#23353F;--rule-strong:#3E5462;
+  --haz:#F07A26;--haz-hover:#FF9142;--haz-tint:rgba(240,122,38,.12);
+  --night:#071016;--on-night:#E4EAEC;--night-muted:#8FA2AC;--night-rule:#1F3441;
+  --map-dot:#2C404B;--map-line:#C9D5DA;--map-halo:#0C171E;
+  --error:#FF8A7A;--focus:#FF9142;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.6;font-stretch:100%;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit}
+img,svg{max-width:100%}
+h1,h2,h3{margin:0}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
+section[id]{scroll-margin-top:calc(var(--header-h) + 8px)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border:2px solid transparent;border-radius:2px;font:inherit;font-size:1rem;font-weight:650;line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
+.btn-primary{background:var(--haz);border-color:var(--haz);color:var(--on-haz)}
+.btn-primary:hover{background:var(--haz-hover);border-color:var(--haz-hover)}
+.btn-quiet{background:transparent;border-color:var(--rule-strong);color:var(--ink)}
+.btn-quiet:hover{border-color:var(--ink)}
+
+/* Header */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--ground);background:color-mix(in srgb,var(--ground) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.header-inner{display:flex;align-items:center;gap:32px;min-height:var(--header-h);position:relative}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-size:1.0625rem;font-weight:720;font-stretch:114%;letter-spacing:-.01em;white-space:nowrap}
+.brand-plate{width:34px;height:24px;flex:none;display:block}
+.site-nav{display:flex;gap:26px;margin-left:auto}
+.site-nav a{text-decoration:none;font-size:.9375rem;font-weight:520;color:var(--ink-soft);padding-block:8px;border-bottom:2px solid transparent}
+.site-nav a:hover{color:var(--ink);border-bottom-color:var(--haz)}
+.site-nav .nav-quote{display:none}
+.header-cta{min-height:42px;padding:8px 16px;font-size:.9375rem}
+.menu-btn{display:none;align-items:center;gap:8px;margin-left:auto;min-height:42px;padding:8px 14px;background:transparent;border:1px solid var(--rule-strong);border-radius:2px;color:var(--ink);font:inherit;font-size:.9375rem;font-weight:600;cursor:pointer}
+.menu-btn svg{width:18px;height:18px}
+
+/* Hero */
+.hero{padding-block:clamp(40px,6vw,88px) clamp(48px,6vw,88px)}
+.hero h1{font-size:clamp(2.6rem,1.05rem + 5.6vw,6.4rem);font-stretch:118%;font-weight:720;line-height:.96;letter-spacing:-.028em;max-width:13ch;text-wrap:balance;margin-bottom:clamp(28px,4vw,56px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"lead map" "corr map";column-gap:clamp(32px,5vw,80px);row-gap:44px;align-items:start}
+.hero-lead{grid-area:lead}
+.hero-map{grid-area:map;margin:0}
+.corridors{grid-area:corr}
+.lead{font-size:1.25rem;line-height:1.55;color:var(--ink-soft);max-width:44ch;margin:0 0 28px}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+
+/* Map */
+.map{display:block;width:100%;height:auto;overflow:visible}
+.land{fill:url(#dots)}
+.dot{fill:var(--map-dot)}
+.ocean{font-size:13px;font-style:italic;font-weight:400;fill:var(--muted);letter-spacing:.04em}
+.corridor{opacity:.26;transition:opacity .25s}
+.corridor.is-active{opacity:1}
+.c-base{fill:none;stroke:var(--map-line);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke-width .25s}
+.corridor.is-active .c-base{stroke-width:5}
+.c-flow{fill:none;stroke:var(--haz);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 14;opacity:0}
+.corridor.is-active .c-flow{opacity:1;animation:flow 1.1s linear infinite}
+.map.is-paused .c-flow{animation-play-state:paused}
+@keyframes flow{to{stroke-dashoffset:-16}}
+.c-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
+.n-port{fill:var(--map-line);stroke:var(--map-halo);stroke-width:2;r:5.5}
+.n-hub{fill:var(--map-halo);stroke:var(--map-line);stroke-width:2.5;r:5}
+.n-hq{fill:var(--haz);stroke:var(--map-line);stroke-width:2.5;r:8}
+.node{opacity:.45;transition:opacity .25s}
+.node.is-on,.node.n-hq{opacity:1}
+.lbl{font-size:14px;font-weight:500;fill:var(--muted);paint-order:stroke;stroke:var(--map-halo);stroke-width:4px;stroke-linejoin:round;transition:fill .25s}
+.lbl.is-on{fill:var(--ink);font-weight:650}
+.lbl.lbl-hq{fill:var(--ink);font-weight:700}
+.lbl.minor{visibility:hidden}
+.lbl.minor.is-on{visibility:visible}
+.map-caption{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);font-size:.875rem;color:var(--muted)}
+.key{display:inline-flex;align-items:center;gap:8px}
+.key svg{width:14px;height:14px;flex:none}
+.flow-toggle{margin-left:auto;background:none;border:1px solid var(--rule-strong);border-radius:2px;padding:6px 12px;font:inherit;font-size:.875rem;font-weight:600;color:var(--ink);cursor:pointer}
+.flow-toggle:hover{border-color:var(--ink)}
+
+.corridors-title{font-size:1rem;font-weight:650;margin-bottom:12px}
+.corridor-list{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.corridor-list li{border-bottom:1px solid var(--rule)}
+.c-btn{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:14px;width:100%;padding:11px 2px;background:none;border:0;font:inherit;font-size:.9375rem;color:var(--ink-soft);text-align:left;cursor:pointer}
+.c-btn:hover{color:var(--ink)}
+.c-btn .sw{height:3px;background:var(--map-line);opacity:.35;border-radius:2px}
+.c-btn .c-span{color:var(--muted);font-size:.875rem;white-space:nowrap}
+.c-btn[aria-pressed="true"]{color:var(--ink);font-weight:650}
+.c-btn[aria-pressed="true"] .sw{height:5px;background:var(--haz);opacity:1}
+.corridor-route{margin:16px 0 0;font-size:.9375rem;color:var(--muted);line-height:1.55}
+.corridor-route strong{color:var(--ink);font-weight:650}
+
+/* Operating profile */
+.profile{background:var(--surface);border-block:1px solid var(--rule)}
+.profile-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,4fr);gap:32px;padding-block:36px}
+.profile-title{font-size:1rem;font-weight:650;padding-top:2px}
+.profile-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:0}
+.profile-list>div{border-left:1px solid var(--rule);padding-left:20px}
+.profile-list dt{font-size:.875rem;color:var(--muted)}
+.profile-list dd{margin:4px 0 0;font-size:.9375rem;color:var(--ink-soft);line-height:1.4}
+.fig{display:block;margin-bottom:4px;font-size:clamp(2rem,1.3rem + 1.6vw,2.75rem);font-stretch:112%;font-weight:680;line-height:1.05;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Sections */
+.section{padding-block:clamp(64px,8vw,120px)}
+.section-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,5vw,80px);align-items:end;margin-bottom:clamp(32px,4vw,56px)}
+.section-head h2,.split h2{font-size:clamp(2rem,1.2rem + 2.4vw,3.35rem);font-stretch:114%;font-weight:700;line-height:1.02;letter-spacing:-.022em;text-wrap:balance}
+.section-head p{margin:0;font-size:1.125rem;color:var(--muted);max-width:56ch}
+
+/* Products */
+.product-list{border-top:2px solid var(--ink)}
+.product{border-bottom:1px solid var(--rule)}
+.product summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto 28px;align-items:center;gap:clamp(16px,3vw,40px);padding-block:22px;cursor:pointer;list-style:none}
+.product summary::-webkit-details-marker{display:none}
+.product summary:hover .product-name strong{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:var(--haz)}
+.plate{display:inline-grid;grid-template-rows:1fr 1fr;width:76px;height:54px;background:var(--plate);border:3px solid var(--plate-ink);color:var(--plate-ink);font-size:1.0625rem;font-stretch:75%;font-weight:800;line-height:1;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.plate>span{display:grid;place-items:center}
+.plate>span+span{border-top:3px solid var(--plate-ink)}
+.plate.plate-none{grid-template-rows:1fr;background:transparent;border-color:var(--rule-strong);color:var(--muted);font-size:.9375rem}
+.product-name strong{display:block;font-size:1.375rem;font-stretch:108%;font-weight:680;line-height:1.2}
+.product-name>span{display:block;margin-top:4px;font-size:1rem;color:var(--muted)}
+.product-spec{font-size:.9375rem;color:var(--ink-soft);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.toggle{position:relative;width:28px;height:28px}
+.toggle::before,.toggle::after{content:"";position:absolute;left:6px;right:6px;top:13px;height:2px;background:var(--ink);transition:transform .2s,opacity .2s}
+.toggle::after{transform:rotate(90deg)}
+.product[open] .toggle::after{transform:rotate(0);opacity:0}
+.product-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding:0 0 32px calc(76px + clamp(16px,3vw,40px))}
+.product-body h3{font-size:.9375rem;font-weight:650;margin-bottom:8px}
+.product-body ul{margin:0;padding-left:18px;color:var(--ink-soft);font-size:.9375rem}
+.product-body li+li{margin-top:4px}
+
+/* Sectors */
+.sectors{background:var(--surface);border-block:1px solid var(--rule)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;margin-bottom:-1px;padding:14px 18px;background:none;border:0;border-bottom:3px solid transparent;font:inherit;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--haz)}
+.tab-panel{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,80px);padding-top:44px}
+.sector-statement{margin:0;font-size:clamp(1.45rem,1.05rem + 1.2vw,2.1rem);font-stretch:106%;font-weight:600;line-height:1.22;letter-spacing:-.012em;text-wrap:balance}
+.sector-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.sector-cols>div{border-top:2px solid var(--ink);padding-top:14px}
+.sector-cols h3{font-size:.9375rem;font-weight:650;margin-bottom:6px}
+.sector-cols p{margin:0;font-size:.9375rem;color:var(--ink-soft)}
+
+/* Custody */
+.custody{background:var(--night);color:var(--on-night);padding-block:clamp(64px,8vw,120px);border-block:1px solid var(--night-rule)}
+.custody .section-head p{color:var(--night-muted)}
+.custody-line{--gap:24px;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--gap);list-style:none;margin:0;padding:0}
+.custody-line::before{content:"";position:absolute;top:15px;left:16px;right:calc((100% - 4 * var(--gap)) / 5 - 16px);height:3px;background:var(--night-rule)}
+.custody-line li{position:relative}
+.stop{position:relative;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--night);border:3px solid var(--on-night);font-size:.875rem;font-weight:700;font-variant-numeric:tabular-nums}
+.custody-line li:last-child .stop{background:var(--haz);border-color:var(--haz);color:var(--on-haz)}
+.custody-line h3{margin:22px 0 8px;font-size:1.25rem;font-stretch:108%;font-weight:650}
+.custody-line p{margin:0;font-size:.9375rem;color:var(--night-muted)}
+.custody-line .record{margin-top:18px;padding-top:12px;border-top:1px solid var(--night-rule);color:var(--on-night);font-weight:600}
+.record-label{display:block;font-size:.8125rem;font-weight:500;color:var(--night-muted)}
+.custody-foot{margin:56px 0 0;max-width:62ch;font-size:1.125rem;color:var(--on-night)}
+
+/* Pricing */
+.table-wrap{overflow-x:auto}
+.price-table{width:100%;border-collapse:collapse;font-size:1rem}
+.price-table th,.price-table td{padding:18px 20px 18px 0;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+.price-table th:first-child,.price-table td:first-child{padding-left:14px}
+.price-table thead th{padding-top:0;font-size:.875rem;font-weight:600;color:var(--muted);border-bottom:2px solid var(--ink)}
+.price-table tbody th{width:22%;font-weight:650;font-stretch:106%}
+.price-table td{color:var(--ink-soft)}
+.price-table .ours th,.price-table .ours td{background:var(--haz-tint)}
+.chip{display:inline-block;padding:3px 11px;border:1px solid var(--haz);border-radius:999px;font-size:.875rem;color:var(--ink);white-space:nowrap}
+
+/* Procurement */
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5vw,80px);align-items:start}
+.split-copy p{margin:20px 0 28px;max-width:44ch;font-size:1.125rem;color:var(--muted)}
+.doc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.doc-list li{display:flex;align-items:center;gap:14px;padding-block:15px;border-bottom:1px solid var(--rule);font-size:.9844rem}
+.doc-list li::before{content:"";flex:none;width:16px;height:11px;background:linear-gradient(var(--plate-ink),var(--plate-ink)) center/100% 2px no-repeat,var(--plate);border:2px solid var(--plate-ink)}
+
+/* Quote */
+.quote{background:var(--surface);border-top:1px solid var(--rule)}
+.contact-list{margin:36px 0 0;border-top:1px solid var(--rule)}
+.contact-list>div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding-block:13px;border-bottom:1px solid var(--rule)}
+.contact-list dt{font-size:.9375rem;color:var(--muted)}
+.contact-list dd{margin:0;font-size:.9375rem;font-weight:600;overflow-wrap:anywhere}
+.contact-list a{text-decoration-color:var(--rule-strong);text-underline-offset:3px}
+.contact-list a:hover{text-decoration-color:var(--haz)}
+.quote-form,.quote-done{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:clamp(20px,3vw,36px);background:var(--ground);border:1px solid var(--rule)}
+.form-title{grid-column:1/-1;font-size:1.25rem;font-stretch:108%;font-weight:680}
+.field{display:grid;gap:6px;align-content:start}
+.field.full{grid-column:1/-1}
+.field label{font-size:.9375rem;font-weight:600}
+.field .opt{font-weight:400;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;min-height:48px;padding:11px 13px;background:var(--surface);border:1px solid var(--rule-strong);border-radius:2px;font:inherit;font-size:1rem;color:var(--ink)}
+.field textarea{min-height:110px;resize:vertical}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.field [aria-invalid="true"]{border-color:var(--error);border-width:2px}
+.error{min-height:0;font-size:.875rem;color:var(--error)}
+.error:empty{display:none}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.form-note{margin:0;font-size:.875rem;color:var(--muted);max-width:46ch}
+.quote-done{grid-template-columns:1fr;align-content:start}
+.quote-done h3{font-size:1.5rem;font-stretch:108%;font-weight:680}
+.quote-done p{margin:0;color:var(--ink-soft)}
+.done-summary{margin:0;border-top:1px solid var(--rule)}
+.done-summary>div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding-block:10px;border-bottom:1px solid var(--rule);font-size:.9375rem}
+.done-summary dt{color:var(--muted)}
+.done-summary dd{margin:0;overflow-wrap:anywhere}
+.quote-done .btn{justify-self:start}
+
+/* Footer */
+.site-footer{background:var(--night);color:var(--on-night);padding-block:64px 32px}
+.footer-grid{display:grid;grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr));gap:40px}
+.footer-grid p{margin:18px 0 0;max-width:36ch;font-size:.9375rem;color:var(--night-muted)}
+.site-footer .brand{color:var(--on-night)}
+.footer-grid h2{margin-bottom:14px;font-size:.875rem;font-weight:600;color:var(--night-muted)}
+.footer-grid ul{list-style:none;margin:0;padding:0}
+.footer-grid li+li{margin-top:9px}
+.footer-grid a{font-size:.9375rem;text-decoration:none}
+.footer-grid a:hover{text-decoration:underline;text-decoration-color:var(--haz);text-underline-offset:4px}
+.footer-base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 32px;margin-top:56px;padding-top:24px;border-top:1px solid var(--night-rule);font-size:.875rem;color:var(--night-muted)}
+.footer-base p{margin:0}
+
+/* Responsive */
+@media (max-width:1080px){
+  .site-nav{gap:20px}
+  .profile-grid{grid-template-columns:1fr;gap:18px}
+  .product-body{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sector-cols{grid-template-columns:1fr}
+  .custody-line{grid-template-columns:1fr;gap:34px}
+  .custody-line::before{top:16px;bottom:16px;left:15px;right:auto;width:3px;height:auto}
+  .custody-line li{padding-left:56px}
+  .stop{position:absolute;left:0;top:0}
+  .custody-line h3{margin-top:2px}
+  .footer-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .footer-grid>div:first-child{grid-column:1/-1}
+}
+@media (max-width:960px){
+  .site-nav{display:none;position:absolute;top:100%;left:calc(-1 * var(--gutter));right:calc(-1 * var(--gutter));flex-direction:column;gap:0;margin:0;padding:6px var(--gutter) 18px;background:var(--ground);border-bottom:1px solid var(--rule)}
+  .site-nav.is-open{display:flex}
+  .site-nav a{padding-block:13px;border-bottom:1px solid var(--rule);font-size:1rem}
+  .site-nav a:hover{border-bottom-color:var(--rule)}
+  .menu-btn{display:inline-flex}
+  .header-cta{margin-left:0}
+  .hero-grid{grid-template-columns:1fr;grid-template-areas:"lead" "map" "corr";row-gap:36px}
+  .section-head,.tab-panel,.split{grid-template-columns:1fr}
+  .profile-list{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
+}
+@media (max-width:720px){
+  .product summary{grid-template-columns:auto minmax(0,1fr) 24px;gap:16px}
+  .product-spec{display:none}
+  .plate{width:62px;height:46px;font-size:.9375rem;border-width:2px}
+  .plate>span+span{border-top-width:2px}
+  .product-body{grid-template-columns:1fr;gap:20px;padding-left:0}
+  .product-name strong{font-size:1.1875rem}
+  .price-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .price-table,.price-table tbody,.price-table tr,.price-table th,.price-table td{display:block;width:100%}
+  .price-table tr{padding:14px;border-bottom:1px solid var(--rule)}
+  .price-table tbody th,.price-table td,.price-table th:first-child,.price-table td:first-child{width:auto;padding:0;border:0}
+  .price-table tbody th{font-size:1.125rem;margin-bottom:8px}
+  .price-table td{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:12px;padding-block:4px;font-size:.9375rem}
+  .price-table td::before{content:attr(data-label);color:var(--muted)}
+  .price-table .ours th,.price-table .ours td{background:none}
+  .price-table tr.ours{background:var(--haz-tint)}
+  .doc-list{grid-template-columns:1fr}
+  .quote-form{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .ocean{visibility:hidden}
+  .c-base{stroke-width:6}
+  .corridor.is-active .c-base{stroke-width:9}
+  .c-flow{stroke-width:5;stroke-dasharray:4 24}
+  .corridor.is-active .c-flow{animation-name:flow-lg}
+  .n-port{r:10;stroke-width:3}
+  .n-hub{r:9;stroke-width:4}
+  .n-hq{r:13;stroke-width:4}
+  .lbl{font-size:26px;stroke-width:7px;visibility:hidden}
+  .lbl.is-end,.lbl.lbl-hq{visibility:visible}
+  .lbl.minor.is-on:not(.is-end){visibility:hidden}
+  .flow-toggle{margin-left:0}
+}
+@keyframes flow-lg{to{stroke-dashoffset:-28}}
+@media (max-width:560px){
+  .header-cta{display:none}
+  .site-nav .nav-quote{display:block;color:var(--ink);font-weight:650}
+  .profile-list{grid-template-columns:1fr 1fr;gap:24px 16px}
+  .profile-list>div{padding-left:14px}
+  .c-btn .c-span{display:none}
+  .contact-list>div,.done-summary>div{grid-template-columns:1fr;gap:2px}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .corridor.is-active .c-flow{animation:none}
+  .corridor,.c-base,.node,.lbl,.toggle::before,.toggle::after{transition:none}
+}
+</style>
+
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Tswana Petroleum, back to top">
+      <svg class="brand-plate" viewBox="0 0 34 24" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="21" fill="#E8711E" stroke="#000" stroke-width="3"/><path d="M1.5 12h31" stroke="#000" stroke-width="3"/></svg>
+      <span>Tswana Petroleum</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <a href="#products">Products</a>
+      <a href="#sectors">Sectors</a>
+      <a href="#pricing">Pricing</a>
+      <a href="csr.html">Responsibility</a>
+      <a href="investors.html">Investors</a>
+      <a href="apply-for-credit.html">Apply for credit</a>
+      <a class="nav-quote" href="#quote">Request a quote</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#quote">Request a quote</a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Menu
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <h1 id="hero-title">Every litre, accounted for.</h1>
+      <div class="hero-grid">
+        <div class="hero-lead">
+          <p class="lead">Tswana Petroleum supplies diesel, petrol, Jet A-1 and lubricants to mines, farms, fleets and industry across the SADC region. Every load is sealed, tracked, metered and reconciled, so the fuel you pay for is the fuel you receive.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#quote">Request a supply quote</a>
+            <a class="btn btn-quiet" href="#products">View products</a>
+          </div>
+        </div>
+
+        <figure class="hero-map" id="network">
+          <svg class="map" id="map" viewBox="0 0 790 630" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">Tswana Petroleum supply corridors</title>
+            <desc id="map-desc">Schematic map of Southern Africa showing seven fuel supply corridors running inland from the ports of Durban, Maputo, Beira, Nacala, Dar es Salaam, Walvis Bay and Lobito, with the head office in Johannesburg.</desc>
+            <defs>
+              <pattern id="dots" width="7" height="7" patternUnits="userSpaceOnUse"><circle class="dot" cx="3.5" cy="3.5" r="1.3"/></pattern>
+              <linearGradient id="fade-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                <stop offset=".13" stop-color="#fff" stop-opacity="1"/>
+              </linearGradient>
+              <mask id="fade" maskUnits="userSpaceOnUse" x="0" y="0" width="790" height="630"><rect width="790" height="630" fill="url(#fade-grad)"/></mask>
+            </defs>
+            <g mask="url(#fade)"><path class="land" id="land" fill-rule="evenodd" d=""/></g>
+            <text class="ocean" x="18" y="520">Atlantic</text>
+            <text class="ocean" x="18" y="536">Ocean</text>
+            <text class="ocean" x="536" y="452">Indian Ocean</text>
+            <g id="map-lines"></g>
+            <g id="map-nodes"></g>
+            <g id="map-labels"></g>
+          </svg>
+          <figcaption class="map-caption">
+            <span class="key"><svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--map-line)"/></svg>Port of entry</span>
+            <span class="key"><svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="var(--ground)" stroke="var(--map-line)" stroke-width="2"/></svg>Inland hub</span>
+            <span class="key"><svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="var(--haz)" stroke="var(--map-line)" stroke-width="1.5"/></svg>Head office</span>
+            <button class="flow-toggle" id="flow-toggle" type="button" aria-pressed="false">Pause flow</button>
+          </figcaption>
+        </figure>
+
+        <div class="corridors">
+          <h2 class="corridors-title" id="corridors-title">Supply corridors</h2>
+          <ul class="corridor-list" id="corridor-list" aria-labelledby="corridors-title"></ul>
+          <p class="corridor-route" id="corridor-route" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile" aria-labelledby="profile-title">
+    <div class="wrap profile-grid">
+      <h2 class="profile-title" id="profile-title">Operating profile</h2>
+      <dl class="profile-list">
+        <div><dt>Markets supplied</dt><dd><span class="fig">16</span>SADC member states</dd></div>
+        <div><dt>Daily capacity</dt><dd><span class="fig">4.2m</span>litres</dd></div>
+        <div><dt>Delivery reliability</dt><dd><span class="fig">98%</span>on time, in full</dd></div>
+        <div><dt>Control room</dt><dd><span class="fig">24/7</span>staffed every day of the year</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="products" aria-labelledby="products-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="products-title">Products</h2>
+        <p>Every fuel we carry travels under its UN dangerous-goods number. The plate beside each product is the one you will see on the tanker at your gate.</p>
+      </div>
+      <div class="product-list">
+        <details class="product" open>
+          <summary>
+            <span class="plate" role="img" aria-label="Hazard code 30, UN 1202"><span>30</span><span>1202</span></span>
+            <span class="product-name"><strong>Diesel</strong><span>Low-sulphur diesel for haul fleets, generators, plant and road transport.</span></span>
+            <span class="product-spec">10 ppm and 50 ppm</span>
+            <span class="toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="product-body">
+            <div><h3>Grades</h3><ul><li>Diesel 10 ppm and 50 ppm sulphur</li><li>Manufactured to SANS 342</li><li>Volumes corrected to 20 °C on every document</li></ul></div>
+            <div><h3>How it arrives</h3><ul><li>Interlink and rigid road tankers</li><li>Bowser refuelling at the machine</li><li>Supply into fixed or mobile site tanks</li></ul></div>
+            <div><h3>Typical use</h3><ul><li>Haul trucks and mining plant</li><li>Tractors and harvesters</li><li>Standby generators</li><li>Long-haul and depot fleets</li></ul></div>
+          </div>
+        </details>
+        <details class="product">
+          <summary>
+            <span class="plate" role="img" aria-label="Hazard code 33, UN 1203"><span>33</span><span>1203</span></span>
+            <span class="product-name"><strong>Petrol</strong><span>Unleaded petrol for light vehicle fleets and site vehicles.</span></span>
+            <span class="product-spec">ULP 93 and ULP 95</span>
+            <span class="toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="product-body">
+            <div><h3>Grades</h3><ul><li>Unleaded 93 and 95</li><li>Manufactured to SANS 1598</li></ul></div>
+            <div><h3>How it arrives</h3><ul><li>Bulk road tankers</li><li>Supply into site and depot tanks</li></ul></div>
+            <div><h3>Typical use</h3><ul><li>Light delivery and pool vehicles</li><li>Site and farm vehicles</li><li>Small equipment</li></ul></div>
+          </div>
+        </details>
+        <details class="product">
+          <summary>
+            <span class="plate" role="img" aria-label="Hazard code 30, UN 1863"><span>30</span><span>1863</span></span>
+            <span class="product-name"><strong>Jet A-1</strong><span>Aviation turbine fuel for charter operators, airfields and remote airstrips.</span></span>
+            <span class="product-spec">AFQRJOS</span>
+            <span class="toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="product-body">
+            <div><h3>Grades</h3><ul><li>Jet A-1 to AFQRJOS</li><li>Batch certificate with every load</li></ul></div>
+            <div><h3>How it arrives</h3><ul><li>Bulk delivery to airfield and airstrip depots</li><li>Sampling at every custody transfer</li></ul></div>
+            <div><h3>Typical use</h3><ul><li>Charter and mining air services</li><li>Crop-spraying and survey aircraft</li><li>Helicopter operations</li></ul></div>
+          </div>
+        </details>
+        <details class="product">
+          <summary>
+            <span class="plate" role="img" aria-label="Hazard code 30, UN 1223"><span>30</span><span>1223</span></span>
+            <span class="product-name"><strong>Illuminating paraffin</strong><span>Paraffin for industrial heating, burners and distributor supply.</span></span>
+            <span class="product-spec">Bulk</span>
+            <span class="toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="product-body">
+            <div><h3>Grades</h3><ul><li>Illuminating paraffin</li><li>Safety data sheet with every first supply</li></ul></div>
+            <div><h3>How it arrives</h3><ul><li>Bulk road tankers</li><li>Supply into distributor depots</li></ul></div>
+            <div><h3>Typical use</h3><ul><li>Industrial burners and heating</li><li>Parts cleaning</li><li>Distributor resale</li></ul></div>
+          </div>
+        </details>
+        <details class="product">
+          <summary>
+            <span class="plate plate-none" role="img" aria-label="Not classified as dangerous goods"><span>Non-DG</span></span>
+            <span class="product-name"><strong>Lubricants and greases</strong><span>Engine, hydraulic and gear oils, greases and coolants for heavy equipment.</span></span>
+            <span class="product-spec">Pails to bulk</span>
+            <span class="toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="product-body">
+            <div><h3>Grades</h3><ul><li>Engine oils</li><li>Hydraulic and transmission oils</li><li>Gear oils and greases</li><li>Coolants</li></ul></div>
+            <div><h3>How it arrives</h3><ul><li>20 L pails and 210 L drums</li><li>1,000 L IBCs</li><li>Bulk into on-site tanks</li></ul></div>
+            <div><h3>Typical use</h3><ul><li>Mining and earthmoving equipment</li><li>Agricultural machinery</li><li>Truck and bus fleets</li></ul></div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section sectors" id="sectors" aria-labelledby="sectors-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="sectors-title">Sectors</h2>
+        <p>Supply plans differ by operation. Choose yours to see what we deliver, how it arrives and the records you receive.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Sectors">
+        <button class="tab" role="tab" type="button" id="tab-mining" aria-controls="panel-mining" aria-selected="true">Mining</button>
+        <button class="tab" role="tab" type="button" id="tab-agriculture" aria-controls="panel-agriculture" aria-selected="false" tabindex="-1">Agriculture</button>
+        <button class="tab" role="tab" type="button" id="tab-construction" aria-controls="panel-construction" aria-selected="false" tabindex="-1">Construction</button>
+        <button class="tab" role="tab" type="button" id="tab-transport" aria-controls="panel-transport" aria-selected="false" tabindex="-1">Transport</button>
+        <button class="tab" role="tab" type="button" id="tab-aviation" aria-controls="panel-aviation" aria-selected="false" tabindex="-1">Aviation</button>
+        <button class="tab" role="tab" type="button" id="tab-industry" aria-controls="panel-industry" aria-selected="false" tabindex="-1">Industry</button>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-mining" aria-labelledby="tab-mining" tabindex="0">
+        <p class="sector-statement">Haul fleets stop when diesel stops. We plan supply around your shift pattern and tank levels, and hold a buffer for the days that go wrong.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Diesel 10 and 50 ppm, engine and hydraulic oils, greases.</p></div>
+          <div><h3>How it arrives</h3><p>Scheduled bulk drops into site tanks. Emergency top-ups dispatched from the 24-hour control room.</p></div>
+          <div><h3>Records you receive</h3><p>Metered delivery tickets, daily stock reports and monthly logbooks structured to support your SARS diesel refund claim.</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-agriculture" aria-labelledby="tab-agriculture" tabindex="0" hidden>
+        <p class="sector-statement">Planting and harvest windows do not move. Fuel needs to be on the farm before the tractors need it.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Diesel, petrol, lubricants and greases.</p></div>
+          <div><h3>How it arrives</h3><p>Seasonal supply plans, farm tank supply and bowser drops to outlying lands.</p></div>
+          <div><h3>Records you receive</h3><p>Delivery records structured to support your SARS diesel refund claim, with volume pricing agreed per season.</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-construction" aria-labelledby="tab-construction" tabindex="0" hidden>
+        <p class="sector-statement">Sites move and plant spreads out. Your fuel supply follows the work.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Diesel, hydraulic oils and greases.</p></div>
+          <div><h3>How it arrives</h3><p>Mobile tanks relocated between sites, and bowser refuelling at the machine.</p></div>
+          <div><h3>Records you receive</h3><p>Consumption by site and by machine, ready for project cost reports.</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-transport" aria-labelledby="tab-transport" tabindex="0" hidden>
+        <p class="sector-statement">Fuel is one of the largest costs in a fleet. Control it at your depot with bulk supply you can measure.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Diesel, petrol and engine oils.</p></div>
+          <div><h3>How it arrives</h3><p>Bulk supply into depot tanks on a fixed schedule.</p></div>
+          <div><h3>Records you receive</h3><p>Depot stock reconciliations and a metered delivery ticket for every drop.</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-aviation" aria-labelledby="tab-aviation" tabindex="0" hidden>
+        <p class="sector-statement">An airstrip depot is only as good as its last sample. Jet A-1 arrives with its quality checks done and its paperwork complete.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Jet A-1 to AFQRJOS.</p></div>
+          <div><h3>How it arrives</h3><p>Bulk delivery to airfield and airstrip depots, with sampling at every custody transfer.</p></div>
+          <div><h3>Records you receive</h3><p>Batch certificate, release note and sample record with every load.</p></div>
+        </div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-industry" aria-labelledby="tab-industry" tabindex="0" hidden>
+        <p class="sector-statement">Boilers, burners and backup power run to a schedule. Your fuel supply runs to the same one.</p>
+        <div class="sector-cols">
+          <div><h3>What we supply</h3><p>Diesel, illuminating paraffin and lubricants.</p></div>
+          <div><h3>How it arrives</h3><p>Scheduled drops, or top-ups triggered by your tank levels.</p></div>
+          <div><h3>Records you receive</h3><p>One consolidated monthly statement across all your sites.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="custody" id="delivery" aria-labelledby="delivery-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="delivery-title">From loading gantry to your tank</h2>
+        <p>Fuel goes missing in the gaps between handovers. We close each gap with a document you can check against your own records.</p>
+      </div>
+      <ol class="custody-line">
+        <li><span class="stop" aria-hidden="true">1</span><h3>Load</h3><p>Loaded at a licensed terminal. Volume is measured and corrected to 20 °C.</p><p class="record"><span class="record-label">You receive</span>Loading certificate</p></li>
+        <li><span class="stop" aria-hidden="true">2</span><h3>Seal</h3><p>Every compartment is sealed at the gantry and each seal number is logged.</p><p class="record"><span class="record-label">You receive</span>Seal register</p></li>
+        <li><span class="stop" aria-hidden="true">3</span><h3>Track</h3><p>The control room follows each truck by GPS and flags any unplanned stop.</p><p class="record"><span class="record-label">You receive</span>Trip report with GPS trace</p></li>
+        <li><span class="stop" aria-hidden="true">4</span><h3>Deliver</h3><p>Your tank is dipped before and after. Product is metered in with your team present.</p><p class="record"><span class="record-label">You receive</span>Signed, metered delivery ticket</p></li>
+        <li><span class="stop" aria-hidden="true">5</span><h3>Reconcile</h3><p>Every delivery is matched against your stock and your invoices each month.</p><p class="record"><span class="record-label">You receive</span>Monthly reconciliation statement</p></li>
+      </ol>
+      <p class="custody-foot">The control room is staffed 24 hours a day, every day of the year. Call it for emergency supply or to trace any load in transit.</p>
+    </div>
+  </section>
+
+  <section class="section" id="pricing" aria-labelledby="pricing-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="pricing-title">How your price is built</h2>
+        <p>South African fuel prices follow a regulated framework that adjusts on the first Wednesday of each month. Three parts of your price sit outside our control. The other two are ours, and we fix them in your supply agreement.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="price-table">
+          <caption class="visually-hidden">Components of a delivered fuel price</caption>
+          <thead><tr><th scope="col">Component</th><th scope="col">What drives it</th><th scope="col">Controlled by</th><th scope="col">When it changes</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Basic fuel price</th><td data-label="What drives it">International product prices, freight and the rand–dollar exchange rate</td><td data-label="Controlled by">International markets</td><td data-label="When it changes">Monthly</td></tr>
+            <tr><th scope="row">Fuel and RAF levies</th><td data-label="What drives it">General fuel levy and Road Accident Fund levy</td><td data-label="Controlled by">National Treasury</td><td data-label="When it changes">With the national Budget, usually in April</td></tr>
+            <tr><th scope="row">Inland transport</th><td data-label="What drives it">Distance from the coast to your pricing zone</td><td data-label="Controlled by">Regulated zone differentials</td><td data-label="When it changes">Periodically, by regulation</td></tr>
+            <tr class="ours"><th scope="row">Wholesale margin</th><td data-label="What drives it">Our cost of supply and service</td><td data-label="Controlled by">Tswana Petroleum</td><td data-label="When it changes"><span class="chip">Fixed for your agreement term</span></td></tr>
+            <tr class="ours"><th scope="row">Delivery</th><td data-label="What drives it">Drop size, distance and site access</td><td data-label="Controlled by">Tswana Petroleum</td><td data-label="When it changes"><span class="chip">Quoted upfront per site</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="responsibility" aria-labelledby="responsibility-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="responsibility-title">Fuel is a responsibility, not only a product</h2>
+        <p>We move dangerous goods across borders, through communities and onto working sites. How we do that matters as much as the litres we deliver. Our responsibility programme runs across safety, the environment, the people we employ, the suppliers we develop and the governance that holds it together.</p>
+      </div>
+      <div class="product-body" style="grid-template-columns:repeat(4,minmax(0,1fr));padding:0">
+        <div><h3>Safety and environment</h3><ul><li>Sealed, metered, tracked custody on every load</li><li>Spill prevention and response planning</li><li>Low-sulphur 10 ppm diesel for cleaner combustion</li></ul></div>
+        <div><h3>People and communities</h3><ul><li>Driver training and road-safety programmes</li><li>Learnerships and skills development</li><li>Local hiring along the corridors</li></ul></div>
+        <div><h3>Enterprise development</h3><ul><li>B-BBEE aligned supplier development</li><li>Preferential procurement from local firms</li><li>Owner-driver and transporter growth</li></ul></div>
+        <div><h3>Governance and ethics</h3><ul><li>Employee and supplier codes of conduct</li><li>Anti-bribery and fair dealing</li><li>POPIA and PAIA transparency</li></ul></div>
+      </div>
+      <div class="actions" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:36px">
+        <a class="btn btn-primary" href="csr.html">Read our CSR commitments</a>
+        <a class="btn btn-quiet" href="code-of-conduct-employees.html">Employee Code of Conduct</a>
+        <a class="btn btn-quiet" href="code-of-conduct-suppliers.html">Supplier Code of Conduct</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section sectors" id="procurement" aria-labelledby="procurement-title">
+    <div class="wrap split">
+      <div class="split-copy">
+        <h2 id="procurement-title">Ready for your procurement process</h2>
+        <p>Supplier registration should take days. Our onboarding pack holds the documents procurement and compliance teams ask for, kept current.</p>
+        <button class="btn btn-primary" type="button" id="request-pack">Request the onboarding pack</button>
+      </div>
+      <ul class="doc-list" aria-label="Documents in the onboarding pack">
+        <li>Company registration (CIPC)</li>
+        <li>Petroleum wholesale licence</li>
+        <li>SARS tax compliance status PIN</li>
+        <li>B-BBEE certificate</li>
+        <li>COIDA letter of good standing</li>
+        <li>Bank confirmation letter</li>
+        <li>SHEQ policy and safety file</li>
+        <li>Safety data sheets for every product</li>
+        <li>Public liability insurance certificate</li>
+        <li>Standard supply agreement for legal review</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section quote" id="quote" aria-labelledby="quote-title">
+    <div class="wrap split">
+      <div class="split-copy">
+        <h2 id="quote-title">Request a supply quote</h2>
+        <p>Tell us what you use, where and how much. A supply manager replies within one business day with pricing and a delivery plan.</p>
+        <dl class="contact-list">
+          <div><dt>Sales</dt><dd><a href="tel:+27110000000">+27 11 000 0000</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:hello@tswanapetroleum.co.za">hello@tswanapetroleum.co.za</a></dd></div>
+          <div><dt>Head office</dt><dd>Woodmead, Johannesburg</dd></div>
+          <div><dt>Office hours</dt><dd>Monday to Friday, 08:00–17:00</dd></div>
+          <div><dt>Control room</dt><dd>24 hours, every day</dd></div>
+        </dl>
+      </div>
+      <div>
+        <form class="quote-form" id="quote-form" novalidate>
+          <h3 class="form-title">Your requirement</h3>
+          <div class="field"><label for="q-name">Full name</label><input id="q-name" name="name" autocomplete="name" required aria-describedby="e-name"><span class="error" id="e-name"></span></div>
+          <div class="field"><label for="q-company">Company</label><input id="q-company" name="company" autocomplete="organization" required aria-describedby="e-company"><span class="error" id="e-company"></span></div>
+          <div class="field"><label for="q-email">Work email</label><input id="q-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email"><span class="error" id="e-email"></span></div>
+          <div class="field"><label for="q-phone">Phone <span class="opt">(optional)</span></label><input id="q-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="q-product">Product</label>
+            <select id="q-product" name="product">
+              <option>Diesel</option><option>Petrol</option><option>Jet A-1</option><option>Illuminating paraffin</option><option>Lubricants and greases</option><option>Several products</option><option>Supplier onboarding pack</option>
+            </select>
+          </div>
+          <div class="field"><label for="q-volume">Monthly volume</label>
+            <select id="q-volume" name="volume">
+              <option>Under 20,000 litres</option><option selected>20,000 to 100,000 litres</option><option>100,000 to 500,000 litres</option><option>Over 500,000 litres</option><option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field full"><label for="q-location">Delivery location</label><input id="q-location" name="location" placeholder="Town and province, or country" required aria-describedby="e-location"><span class="error" id="e-location"></span></div>
+          <div class="field full"><label for="q-details">Anything else we should know <span class="opt">(optional)</span></label><textarea id="q-details" name="details" placeholder="Tank sizes, delivery frequency, site access, current supplier"></textarea></div>
+          <div class="form-foot">
+            <button class="btn btn-primary" type="submit">Request quote</button>
+            <p class="form-note">We use these details only to respond to your request, in line with POPIA.</p>
+          </div>
+        </form>
+        <div class="quote-done" id="quote-done" tabindex="-1" hidden>
+          <h3>Quote request received</h3>
+          <p id="done-msg"></p>
+          <dl class="done-summary" id="done-summary"></dl>
+          <button class="btn btn-quiet" type="button" id="quote-again">Start another request</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="#top" aria-label="Tswana Petroleum, back to top">
+        <svg class="brand-plate" viewBox="0 0 34 24" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="21" fill="#E8711E" stroke="#000" stroke-width="3"/><path d="M1.5 12h31" stroke="#000" stroke-width="3"/></svg>
+        <span>Tswana Petroleum</span>
+      </a>
+      <p>Independent fuel supply for Southern Africa. Head office in Woodmead, Johannesburg.</p>
+    </div>
+    <nav aria-labelledby="f-products"><h2 id="f-products">Products</h2><ul><li><a href="#products">Diesel</a></li><li><a href="#products">Petrol</a></li><li><a href="#products">Jet A-1</a></li><li><a href="#products">Lubricants and greases</a></li></ul></nav>
+    <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul><li><a href="chairmans-message.html">Chairman's message</a></li><li><a href="csr.html">Responsibility</a></li><li><a href="investors.html">Investors</a></li><li><a href="#network">Network</a></li><li><a href="#delivery">How we deliver</a></li><li><a href="#procurement">Procurement</a></li></ul></nav>
+    <nav aria-labelledby="f-legal"><h2 id="f-legal">Governance &amp; legal</h2><ul><li><a href="code-of-conduct-employees.html">Employee Code of Conduct</a></li><li><a href="code-of-conduct-suppliers.html">Supplier Code of Conduct</a></li><li><a href="apply-for-credit.html">Apply for credit</a></li><li><a href="#">PAIA manual</a></li><li><a href="#">Privacy notice (POPIA)</a></li><li><a href="#">Standard terms of supply</a></li></ul></nav>
+  </div>
+  <div class="wrap footer-base">
+    <p>© 2026 Tswana Petroleum Co. All rights reserved.</p>
+    <p>Company registration and wholesale licence details available on request.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var LON0 = 10, LAT0 = -4, KX = 18.8, KY = 20;
+  function P(ll){ return [ +((ll[0]-LON0)*KX).toFixed(1), +((LAT0-ll[1])*KY).toFixed(1) ]; }
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function ring(pts){ return pts.map(function(p,i){ var q = P(p); return (i ? "L" : "M") + q[0] + " " + q[1]; }).join("") + "Z"; }
+
+  /* Coastline, simplified (lon, lat) */
+  var mainland = [[11.2,-3],[12,-5],[12.3,-6.1],[13.2,-8.8],[13.8,-10.7],[13.55,-12.35],[12.4,-13.9],[12.15,-15.2],[11.8,-17.25],[12.5,-18.5],[13.4,-20.2],[14.5,-22.9],[14.9,-25],[15.15,-26.65],[16.45,-28.6],[17.3,-30.5],[18,-32.3],[18.4,-33.9],[18.5,-34.35],[20,-34.83],[22.1,-34.2],[24.8,-34.2],[25.6,-33.95],[27.9,-33],[29.5,-31.6],[31.05,-29.87],[32.1,-28.8],[32.9,-26.9],[32.6,-25.97],[33.6,-25],[35.4,-23.9],[35.5,-22],[35,-20.5],[34.85,-19.85],[36.9,-17.9],[39.1,-16.8],[40.1,-15.5],[40.7,-14.5],[40.5,-12.96],[40.45,-10.5],[39.5,-8.9],[39.3,-6.8],[38.9,-5.1],[39.7,-3]];
+  var madagascar = [[49.3,-12],[50.2,-14.5],[50.45,-15.5],[49.8,-17],[49.4,-18.2],[48.4,-20.8],[47.6,-23],[47.1,-24.9],[46,-25.3],[45.1,-25.5],[44.1,-25],[43.6,-23.5],[43.3,-22],[43.9,-20.5],[44.4,-19],[44,-17.4],[44.4,-16.2],[46.3,-15.7],[47.5,-14.5],[48,-13.5],[48.8,-12.5]];
+  var lakeMalawi = [[34,-9.5],[34.6,-9.6],[34.9,-11.5],[35.3,-13.5],[35.2,-14.4],[34.6,-14.2],[34.3,-12],[34,-10.5]];
+  var lakeTanganyika = [[29.2,-4],[29.6,-4],[30.5,-6.5],[31.1,-8.2],[30.9,-8.7],[30.4,-8.3],[29.5,-6.6],[29.1,-5.2]];
+  document.getElementById("land").setAttribute("d", ring(mainland) + ring(lakeMalawi) + ring(lakeTanganyika) + ring(madagascar));
+
+  /* Nodes: dx/dy in em, a = text-anchor */
+  var nodes = {
+    durban:{n:"Durban",ll:[31.03,-29.86],t:"port",a:"start",dx:.85,dy:.35},
+    maputo:{n:"Maputo",ll:[32.57,-25.97],t:"port",a:"start",dx:.85,dy:.35},
+    walvis:{n:"Walvis Bay",ll:[14.5,-22.95],t:"port",a:"middle",dx:0,dy:1.7},
+    windhoek:{n:"Windhoek",ll:[17.08,-22.56],t:"hub",a:"middle",dx:0,dy:-1},
+    gaborone:{n:"Gaborone",ll:[25.9,-24.65],t:"hub",a:"end",dx:-.6,dy:1.5},
+    jhb:{n:"Johannesburg",ll:[28.05,-26.2],t:"hq",a:"end",dx:-.9,dy:1.6},
+    beitbridge:{n:"Beitbridge",ll:[30,-22.22],t:"hub",a:"end",dx:-.8,dy:.35,minor:1},
+    harare:{n:"Harare",ll:[31.05,-17.83],t:"hub",a:"end",dx:-.8,dy:.9},
+    beira:{n:"Beira",ll:[34.84,-19.83],t:"port",a:"start",dx:.85,dy:.35},
+    lusaka:{n:"Lusaka",ll:[28.28,-15.41],t:"hub",a:"end",dx:-.8,dy:.8},
+    kapiri:{n:"Kapiri Mposhi",ll:[28.68,-13.96],t:"hub",a:"end",dx:-.8,dy:.45,minor:1},
+    ndola:{n:"Ndola",ll:[28.64,-12.97],t:"hub",a:"end",dx:-.8,dy:.3},
+    lubumbashi:{n:"Lubumbashi",ll:[27.48,-11.66],t:"hub",a:"end",dx:-.8,dy:1.1},
+    kolwezi:{n:"Kolwezi",ll:[25.47,-10.71],t:"hub",a:"middle",dx:0,dy:-1},
+    lobito:{n:"Lobito",ll:[13.55,-12.35],t:"port",a:"middle",dx:0,dy:1.8},
+    lilongwe:{n:"Lilongwe",ll:[33.79,-13.96],t:"hub",a:"middle",dx:0,dy:-1},
+    nacala:{n:"Nacala",ll:[40.67,-14.54],t:"port",a:"start",dx:.85,dy:.35},
+    tunduma:{n:"Tunduma",ll:[32.77,-9.3],t:"hub",a:"start",dx:.8,dy:.35,minor:1},
+    dar:{n:"Dar es Salaam",ll:[39.28,-6.79],t:"port",a:"start",dx:.85,dy:.35}
+  };
+
+  var corridors = [
+    {id:"ns",name:"North–South Corridor",route:["durban","jhb","beitbridge","harare","lusaka","kapiri","ndola","lubumbashi","kolwezi"],countries:"South Africa, Zimbabwe, Zambia and DR Congo"},
+    {id:"maputo",name:"Maputo Corridor",route:["maputo","jhb"],countries:"Mozambique and South Africa"},
+    {id:"tk",name:"Trans-Kalahari Corridor",route:["walvis","windhoek","gaborone","jhb"],countries:"Namibia, Botswana and South Africa"},
+    {id:"beira",name:"Beira Corridor",route:["beira","harare"],countries:"Mozambique and Zimbabwe"},
+    {id:"nacala",name:"Nacala Corridor",route:["nacala","lilongwe","lusaka"],countries:"Mozambique, Malawi and Zambia"},
+    {id:"dar",name:"Dar es Salaam Corridor",route:["dar","tunduma","kapiri"],countries:"Tanzania and Zambia"},
+    {id:"lobito",name:"Lobito Corridor",route:["lobito","kolwezi"],countries:"Angola and DR Congo"}
+  ];
+
+  var svg = document.getElementById("map");
+  var gLines = document.getElementById("map-lines");
+  var gNodes = document.getElementById("map-nodes");
+  var gLabels = document.getElementById("map-labels");
+  var list = document.getElementById("corridor-list");
+  var routeOut = document.getElementById("corridor-route");
+  var groups = {}, buttons = {}, nodeEls = {}, labelEls = {};
+
+  corridors.forEach(function(c){
+    var d = c.route.map(function(id,i){ var q = P(nodes[id].ll); return (i ? "L" : "M") + q[0] + " " + q[1]; }).join("");
+    var g = el("g", {"class":"corridor","data-id":c.id}, gLines);
+    el("path", {"class":"c-base", d:d}, g);
+    el("path", {"class":"c-flow", d:d}, g);
+    var hit = el("path", {"class":"c-hit", d:d}, g);
+    hit.addEventListener("click", function(){ setActive(c.id); });
+    groups[c.id] = g;
+
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "c-btn"; b.setAttribute("aria-pressed","false");
+    var a = nodes[c.route[0]].n, z = nodes[c.route[c.route.length-1]].n;
+    b.innerHTML = '<span class="sw" aria-hidden="true"></span><span class="c-name"></span><span class="c-span"></span>';
+    b.querySelector(".c-name").textContent = c.name;
+    b.querySelector(".c-span").textContent = a + " to " + z;
+    b.addEventListener("click", function(){ setActive(c.id); });
+    li.appendChild(b); list.appendChild(li);
+    buttons[c.id] = b;
+  });
+
+  Object.keys(nodes).forEach(function(id){
+    var nd = nodes[id], q = P(nd.ll);
+    var r = nd.t === "hq" ? 8 : nd.t === "port" ? 5.5 : 5;
+    nodeEls[id] = el("circle", {"class":"node n-" + nd.t, cx:q[0], cy:q[1], r:r}, gNodes);
+    var t = el("text", {"class":"lbl" + (nd.minor ? " minor" : "") + (nd.t === "hq" ? " lbl-hq" : ""), x:q[0], y:q[1], dx:nd.dx + "em", dy:nd.dy + "em", "text-anchor":nd.a}, gLabels);
+    t.textContent = nd.n;
+    labelEls[id] = t;
+  });
+
+  function setActive(id){
+    var c = corridors.filter(function(x){ return x.id === id; })[0];
+    if (!c) return;
+    corridors.forEach(function(x){
+      var on = x.id === id;
+      groups[x.id].classList.toggle("is-active", on);
+      buttons[x.id].setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    gLines.appendChild(groups[id]);
+    var set = {};
+    c.route.forEach(function(n){ set[n] = 1; });
+    var first = c.route[0], last = c.route[c.route.length-1];
+    Object.keys(nodes).forEach(function(n){
+      nodeEls[n].classList.toggle("is-on", !!set[n]);
+      labelEls[n].classList.toggle("is-on", !!set[n]);
+      labelEls[n].classList.toggle("is-end", n === first || n === last);
+    });
+    routeOut.innerHTML = "";
+    var s1 = document.createElement("strong"); s1.textContent = c.name + ". ";
+    routeOut.appendChild(s1);
+    routeOut.appendChild(document.createTextNode(c.route.map(function(n){ return nodes[n].n; }).join(", ") + ". Crosses " + c.countries + "."));
+  }
+  setActive("ns");
+
+  var flowBtn = document.getElementById("flow-toggle");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { flowBtn.hidden = true; }
+  flowBtn.addEventListener("click", function(){
+    var paused = svg.classList.toggle("is-paused");
+    flowBtn.setAttribute("aria-pressed", paused ? "true" : "false");
+    flowBtn.textContent = paused ? "Play flow" : "Pause flow";
+  });
+
+  /* Mobile menu */
+  var menuBtn = document.getElementById("menu-btn"), nav = document.getElementById("site-nav");
+  menuBtn.addEventListener("click", function(){
+    var open = nav.classList.toggle("is-open");
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  nav.addEventListener("click", function(e){
+    if (e.target.closest("a")) { nav.classList.remove("is-open"); menuBtn.setAttribute("aria-expanded","false"); }
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && nav.classList.contains("is-open")) { nav.classList.remove("is-open"); menuBtn.setAttribute("aria-expanded","false"); menuBtn.focus(); }
+  });
+
+  /* Sector tabs */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function selectTab(tab, focus){
+    tabs.forEach(function(t){
+      var on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener("click", function(){ selectTab(t, false); });
+    t.addEventListener("keydown", function(e){
+      var k = e.key, j = null;
+      if (k === "ArrowRight") j = (i + 1) % tabs.length;
+      else if (k === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+      else if (k === "Home") j = 0;
+      else if (k === "End") j = tabs.length - 1;
+      if (j !== null) { e.preventDefault(); selectTab(tabs[j], true); }
+    });
+  });
+
+  /* Quote form */
+  var form = document.getElementById("quote-form"), done = document.getElementById("quote-done");
+  var rules = [
+    {id:"q-name", err:"e-name", msg:"Enter your full name."},
+    {id:"q-company", err:"e-company", msg:"Enter your company name."},
+    {id:"q-email", err:"e-email", msg:"Enter a work email address, for example name@company.co.za.", email:true},
+    {id:"q-location", err:"e-location", msg:"Enter where the fuel should be delivered."}
+  ];
+  function check(r){
+    var f = document.getElementById(r.id), v = f.value.trim();
+    var bad = !v || (r.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    f.setAttribute("aria-invalid", bad ? "true" : "false");
+    document.getElementById(r.err).textContent = bad ? r.msg : "";
+    return !bad;
+  }
+  rules.forEach(function(r){
+    document.getElementById(r.id).addEventListener("blur", function(){ if (this.getAttribute("aria-invalid") === "true" || this.value.trim()) check(r); });
+  });
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var firstBad = null;
+    rules.forEach(function(r){ if (!check(r) && !firstBad) firstBad = document.getElementById(r.id); });
+    if (firstBad) { firstBad.focus(); return; }
+    var val = function(id){ return document.getElementById(id).value.trim(); };
+    document.getElementById("done-msg").textContent = "A supply manager will reply to " + val("q-email") + " within one business day.";
+    var sum = document.getElementById("done-summary"); sum.innerHTML = "";
+    [["Company", val("q-company")], ["Product", val("q-product")], ["Monthly volume", val("q-volume")], ["Delivery location", val("q-location")]].forEach(function(p){
+      var row = document.createElement("div"), dt = document.createElement("dt"), dd = document.createElement("dd");
+      dt.textContent = p[0]; dd.textContent = p[1]; row.appendChild(dt); row.appendChild(dd); sum.appendChild(row);
+    });
+    form.hidden = true; done.hidden = false; done.focus();
+  });
+  document.getElementById("quote-again").addEventListener("click", function(){
+    form.reset();
+    rules.forEach(function(r){ document.getElementById(r.id).removeAttribute("aria-invalid"); document.getElementById(r.err).textContent = ""; });
+    done.hidden = true; form.hidden = false; document.getElementById("q-name").focus();
+  });
+
+  document.getElementById("request-pack").addEventListener("click", function(){
+    if (form.hidden) { form.reset(); done.hidden = true; form.hidden = false; }
+    document.getElementById("q-product").value = "Supplier onboarding pack";
+    document.getElementById("quote").scrollIntoView({behavior: reduce ? "auto" : "smooth"});
+    setTimeout(function(){ document.getElementById("q-name").focus({preventScroll:true}); }, reduce ? 0 : 500);
+  });
+})();
+</script>
+
+</body>
+</html>
