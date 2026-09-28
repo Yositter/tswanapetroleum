@@ -149,6 +149,7 @@ h1,h2,h3{margin:0}
 .error:empty{display:none}
 .form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
 .form-note{margin:0;font-size:.875rem;color:var(--muted);max-width:52ch}
+.form-card,.done-card{scroll-margin-top:calc(var(--header-h) + 16px)}
 .done-card{display:grid;gap:14px;padding:clamp(20px,3vw,36px);background:var(--surface);border:1px solid var(--rule);border-radius:2px}
 .done-card h3{font-size:1.5rem;font-stretch:108%;font-weight:680}
 .done-summary{margin:0;border-top:1px solid var(--rule)}
